@@ -2,15 +2,16 @@ package client
 
 import (
 	"context"
+	"log"
+
 	desc "github.com/alexlzrv/note-service/pkg/note_v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
 )
 
 const address = "localhost:50051"
 
-func InitClient() {
+func RunClient() {
 	con, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("didn`t connect: %s", err.Error())
