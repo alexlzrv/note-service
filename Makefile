@@ -11,11 +11,11 @@ generate:
 
 .PHONY: docker-run
 docker-run:
-	docker compose up --force-recreate --build -d
+	docker-compose up --build -d
 
 .PHONY: docker-stop
 docker-stop:
-	docker compose down
+	docker-compose down
 
 .PHONY: local-migration-status
 local-migration-status:

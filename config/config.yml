@@ -1,0 +1,3 @@
+postgres:
+  pool_max: 2
+  url : postgres://note-service-user:note-service-password@localhost:5434/note-service

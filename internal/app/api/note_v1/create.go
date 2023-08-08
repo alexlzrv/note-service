@@ -2,18 +2,18 @@ package note_v1
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/alexlzrv/note-service/internal/mapper"
 	desc "github.com/alexlzrv/note-service/pkg/note_v1"
 )
 
 func (n *Note) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
-	fmt.Println("Create")
-	fmt.Println("title:", req.Note.GetTitle())
-	fmt.Println("text:", req.Note.GetText())
-	fmt.Println("author:", req.Note.GetAuthor())
+	id, err := n.note.CreateNote(ctx, mapper.DescToNote(req.GetNote()))
+	if err != nil {
+		return nil, err
+	}
 
 	return &desc.CreateResponse{
-		Id: 1,
+		Id: id,
 	}, nil
 }
