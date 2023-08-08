@@ -2,17 +2,18 @@ package note_v1
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/alexlzrv/note-service/internal/mapper"
 	desc "github.com/alexlzrv/note-service/pkg/note_v1"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (n *Note) Update(ctx context.Context, req *desc.UpdateRequest) (*emptypb.Empty, error) {
-	fmt.Println("Update")
-	fmt.Println("title:", req.Note.GetTitle())
-	fmt.Println("text:", req.Note.GetText())
-	fmt.Println("author:", req.Note.GetAuthor())
+func (n *Note) Update(ctx context.Context, req *desc.UpdateRequest) (*desc.UpdateResponse, error) {
+	id, err := n.note.UpdateNote(ctx, mapper.DescToNoteInfo(req))
+	if err != nil {
+		return nil, err
+	}
 
-	return &emptypb.Empty{}, nil
+	return &desc.UpdateResponse{
+		Id: id,
+	}, nil
 }

@@ -7,6 +7,7 @@ import (
 	desc "github.com/alexlzrv/note-service/pkg/note_v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 const address = "localhost:50051"
@@ -20,28 +21,26 @@ func RunClient() {
 
 	client := desc.NewNoteV1Client(con)
 
-	createNote(client)
-	getNote(client)
-	updateNote(client)
+	//createNote(client)
+	//getNote(client)
+	//updateNote(client)
 	deleteNote(client)
 }
 
 func createNote(client desc.NoteV1Client) {
-	note := desc.Note{
-		Title:  "title",
-		Text:   "text",
-		Author: "author",
-	}
-
 	res, err := client.Create(context.Background(), &desc.CreateRequest{
-		Note: &note,
+		Note: &desc.Note{
+			Title:  "new title",
+			Text:   "new text",
+			Author: "new author",
+		},
 	})
 
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	log.Println("Id: ", res.Id)
+	log.Println("Id: ", res.GetId())
 }
 
 func getNote(client desc.NoteV1Client) {
@@ -53,19 +52,20 @@ func getNote(client desc.NoteV1Client) {
 		log.Println(err.Error())
 	}
 
-	log.Printf("Title: %s\nText: %s\nAuthor: %s\n\n", res.Note.GetTitle(), res.Note.GetText(), res.Note.GetAuthor())
+	log.Printf("Title: %s\nText: %s\nAuthor: %s\n\n", res.Note.GetTitle(),
+		res.Note.GetText(), res.Note.GetAuthor())
 }
 
 func updateNote(client desc.NoteV1Client) {
-	note := desc.Note{
-		Title:  "title",
-		Text:   "text",
-		Author: "author",
+	note := desc.UpdateNoteInfo{
+		Title:  wrapperspb.String("title2"),
+		Text:   wrapperspb.String("text2"),
+		Author: wrapperspb.String("author2"),
 	}
 
 	_, err := client.Update(context.Background(), &desc.UpdateRequest{
-		Id:   2,
-		Note: &note,
+		Id:       2,
+		NoteInfo: &note,
 	})
 
 	if err != nil {

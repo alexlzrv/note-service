@@ -2,15 +2,15 @@ syntax = "proto3";
 
 package api.note_v1;
 
+import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/alexlzrv/note-service";
 
 service NoteV1 {
   rpc Create(CreateRequest) returns (CreateResponse);
   rpc Get(GetRequest) returns (GetResponse);
-  rpc Update(UpdateRequest) returns (google.protobuf.Empty);
+  rpc Update(UpdateRequest) returns (UpdateResponse);
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
 }
 
@@ -18,8 +18,12 @@ message Note {
   string title = 1;
   string text = 2;
   string author = 3;
-  google.protobuf.Timestamp created_at = 4;
-  google.protobuf.Timestamp updated_at = 5;
+}
+
+message UpdateNoteInfo {
+  google.protobuf.StringValue title = 1;
+  google.protobuf.StringValue text = 2;
+  google.protobuf.StringValue author = 3;
 }
 
 message CreateRequest {
@@ -40,7 +44,11 @@ message GetResponse {
 
 message UpdateRequest {
   int64 id = 1;
-  Note note = 2;
+  UpdateNoteInfo noteInfo = 2;
+}
+
+message UpdateResponse{
+  int64 id = 1;
 }
 
 message DeleteRequest{
